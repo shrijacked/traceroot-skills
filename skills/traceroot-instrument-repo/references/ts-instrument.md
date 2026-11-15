@@ -66,7 +66,7 @@ const answer = await observe(
 );
 ```
 
-A function that returns a stream ends the span at that return, and the streamed work is not a child of it. Pass an async generator and exhaust it. `observe` returns that generator. The body does not run, and the span does not end, until the caller finishes iterating:
+A function that returns a stream ends the span at that return, and the streamed work is not a child of it. Pass an async generator and exhaust it. `observe` returns that generator. The body starts when the caller begins iterating, and the span ends when iteration finishes:
 
 ```typescript
 const answer = observe({ name: 'stream', type: 'llm' }, async function* (query: string) {
