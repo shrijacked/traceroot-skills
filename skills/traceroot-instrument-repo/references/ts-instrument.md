@@ -43,7 +43,7 @@ TraceRoot.initialize({
 registerTelemetry(new OpenTelemetry({ usage: true }));
 ```
 
-Once that integration is registered, a call is traced unless it passes `telemetry: { isEnabled: false }`. `telemetry` is the v7 name. `experimental_telemetry` is the v6 name. AI SDK 6 and earlier emit the spans themselves from `experimental_telemetry: { isEnabled: true }` and do not need `@ai-sdk/otel`.
+Once that integration is registered, a call is traced unless it passes `telemetry: { isEnabled: false }`. A call that passes its own `telemetry.integrations`, including an empty list, uses that list instead of the registered one, so it can drop `@ai-sdk/otel` without setting `isEnabled: false`. `telemetry` is the v7 name. `experimental_telemetry` is the v6 name. AI SDK 6 and earlier emit the spans themselves from `experimental_telemetry: { isEnabled: true }` and do not need `@ai-sdk/otel`.
 
 The TS runtime supports fewer frameworks than Python (many agent frameworks are Python-only). The installed package is the current list — read the `instrumentModules` keys from `node_modules/@traceroot-ai/traceroot`'s type declarations rather than fetching a docs page, which costs a network round trip to learn what the dependency already states. Those keys are the auto-instrumentation coverage; the Vercel AI SDK and Mastra paths above are separate and are not keys. Coverage changes over time, so look rather than assume. Before the dependency is installed there is nothing to read, so consult the published list at https://traceroot.ai/docs/integrations/overview for the analyze step only; once `node_modules` exists, those type declarations are authoritative.
 
