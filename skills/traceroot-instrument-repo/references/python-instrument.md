@@ -4,7 +4,7 @@
 
 Call `traceroot.initialize()` at the application entry point, before any LLM library imports. Load env vars first.
 
-The process that serves traffic has to run that call. `uvicorn app:app` never executes `if __name__ == "__main__"`, so initialize in the module uvicorn imports. Django: `AppConfig.ready()`. Celery prefork: the `worker_process_init` signal, so each child initializes. A call that only ran in the parent is not in the worker.
+The process that serves traffic has to run that call. `uvicorn app:app` never executes `if __name__ == "__main__"`, so initialize in the module uvicorn imports. Django: `AppConfig.ready()` when app and model modules do not import an LLM library. `ready()` runs after those modules are imported, so if they do import one, initialize in `asgi.py` or `wsgi.py` before that import. Celery prefork: the `worker_process_init` signal, so each child initializes. A call that only ran in the parent is not in the worker.
 
 ```python
 from dotenv import load_dotenv
